@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -90,13 +89,19 @@ namespace Productivity
         }
         private void ShowPreviousMonth(object sender, RoutedEventArgs e)
         {
-            displayedDate = displayedDate.AddMonths(-1); // Move to the next month
+            if (!(displayedDate.Year == 1 && displayedDate.Month == 1))
+            {
+                displayedDate = displayedDate.AddMonths(-1); // Move to previous month only if it's not January year 1
+            }
             UpdateCalendar();
         }
 
         private void ShowNextMonth(object sender, RoutedEventArgs e)
         {
-            displayedDate = displayedDate.AddMonths(1); // Move to the next month
+            if (!(displayedDate.Year == 9999 && displayedDate.Month == 12))
+            {
+                displayedDate = displayedDate.AddMonths(1); // Move to the next month only if it's not December year 9999
+            }
             UpdateCalendar();
         }
 
@@ -109,19 +114,16 @@ namespace Productivity
 
         private void YearIntUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-                if (yearIntUpDown.Value < 1900 || yearIntUpDown.Value > 2100)
-                {
-                    // Display error message or take appropriate action
-                    MessageBox.Show("Please enter a valid year between 1900 and 2100");
-                    // Reset year to current year
-                    yearIntUpDown.Value = displayedDate.Year;
-                }
-                else
-                {
-                int yearDiff = (int)yearIntUpDown.Value - displayedDate.Year; // Value will not be null
-                    displayedDate.AddYears(yearDiff);
-                    UpdateCalendar();
-                }
+            int year = (int)yearIntUpDown.Value;
+            if (year >= 1 && year <= 9999)
+            {
+                displayedDate = displayedDate.AddYears(year - displayedDate.Year);
+                UpdateCalendar();
+            }
+            else
+            {
+                yearIntUpDown.Value = displayedDate.Year;
+            }    
         }
 
         //private void MonthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
