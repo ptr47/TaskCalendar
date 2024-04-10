@@ -1,0 +1,38 @@
+﻿<Window x:Class="Productivity.Calendar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Productivity"
+        mc:Ignorable="d"
+        Title="Calendar" Height="450" Width="800"
+        Background="#393939">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Arial"/>
+        </Style>
+        <SolidColorBrush x:Key="MainBackgroundBrush" Color="#4A4A4A"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="←" Padding="5" Click="ShowPreviousMonth" Margin="3"/>
+            <Label x:Name="currentMonth_lbl" Content="Miesiac" Foreground="WhiteSmoke" Margin="3" FontSize="16" FontFamily="Arial"/>
+            <Button Content="→" Padding="5" Click="ShowNextMonth" Margin="3"/>
+            <xctk:IntegerUpDown x:Name="yearIntUpDown" Width="Auto" Margin="30,5,5,5" FontFamily="Arial" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" ValueChanged="YearIntUpDown_ValueChanged"/>
+        </StackPanel>
+        <Grid x:Name="CalendarGrid" Grid.Row="1" />
+    </Grid>
+</Window>

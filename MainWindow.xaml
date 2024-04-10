@@ -1,0 +1,100 @@
+﻿<Window x:Class="Productivity.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Productivity"
+        mc:Ignorable="d"
+        Title="Productivity" Height="450" Width="800"
+        Background="#393939">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Arial"/>
+        </Style>
+        <SolidColorBrush x:Key="MainBackgroundBrush" Color="#4A4A4A"/>
+    </Window.Resources>
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- Left Panel with Buttons -->
+        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top" Margin="0,0,10,0">
+            <Button x:Name="NewTask_btn" Content="New Task" Margin="5" Click="NewTask_btn_Click" 
+                    Padding="10" Background="{StaticResource MainBackgroundBrush}" Foreground="Whitesmoke" BorderThickness="0"
+                    FontSize="14" FontWeight="Bold" HorizontalContentAlignment="Center"/>
+            <Button x:Name="ViewCalendar_btn" Content="View Calendar" Margin="5" Click="ViewCalendar_btn_Click"
+                    Padding="10" Background="{StaticResource MainBackgroundBrush}" Foreground="WhiteSmoke"  BorderThickness="0"
+                    FontSize="14" FontWeight="Bold" HorizontalContentAlignment="Center"/>
+            <Button x:Name="Settings_btn" Content="Settings" Margin="5" Click="Settings_btn_Click"
+                    Padding="10" Background="{StaticResource MainBackgroundBrush}" Foreground="WhiteSmoke"  BorderThickness="0"
+                    FontSize="14" FontWeight="Bold" HorizontalContentAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Calendar Grid -->
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- TextBlocks for weekdays with alternating background colors -->
+            <TextBlock Grid.Column="0" Text="Mon" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="WhiteSmoke" Padding="5" Background="#6A6A6A"/>
+            <TextBlock Grid.Column="1" Text="Tue" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="WhiteSmoke" Padding="5" Background="#7A7A7A"/>
+            <TextBlock Grid.Column="2" Text="Wed" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="WhiteSmoke" Padding="5" Background="#6A6A6A"/>
+            <TextBlock Grid.Column="3" Text="Thu" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="WhiteSmoke" Padding="5" Background="#7A7A7A"/>
+            <TextBlock Grid.Column="4" Text="Fri" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="WhiteSmoke" Padding="5" Background="#6A6A6A"/>
+            <TextBlock Grid.Column="5" Text="Sat" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="WhiteSmoke" Padding="5" Background="#7A7A7A"/>
+            <TextBlock Grid.Column="6" Text="Sun" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" Foreground="WhiteSmoke" Padding="5" Background="#6A6A6A"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Weekdays background colors -->
+            <Rectangle Grid.Column="0" Fill="#8A8A8A"/>
+            <Rectangle Grid.Column="1" Fill="#9A9A9A"/>
+            <Rectangle Grid.Column="2" Fill="#8A8A8A"/>
+            <Rectangle Grid.Column="3" Fill="#9A9A9A"/>
+            <Rectangle Grid.Column="4" Fill="#8A8A8A"/>
+            <Rectangle Grid.Column="5" Fill="#9A9A9A"/>
+            <Rectangle Grid.Column="6" Fill="#8A8A8A"/>
+        </Grid>
+
+        <Button Grid.Column="1" Grid.Row="2" Content="View Next Week" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Click="ViewNextWeek_btn_Click"
+                Padding="10,5" Background="#B0B0B0" Foreground="Black" BorderThickness="0"
+                FontSize="14" HorizontalContentAlignment="Center"/>
+
+        <!-- Right Panel with Statistics -->
+        <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top" Margin="10" Background="{StaticResource MainBackgroundBrush}">
+            <TextBlock Text="Statistics Overview" FontWeight="Bold" Margin="10" Foreground="WhiteSmoke" />
+
+            <!-- Additional Statistics -->
+            <TextBlock Text="Total Tasks: " Margin="5"/>
+            <TextBlock Text="Completed Tasks: " Margin="5"/>
+            <TextBlock Text="Incomplete Tasks: " Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>
