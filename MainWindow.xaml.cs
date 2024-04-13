@@ -14,7 +14,10 @@ namespace Productivity
         public MainWindow()
         {
             InitializeComponent();
-
+            TaskManager taskManager = new TaskManager("TasksDirectory");
+            DateTime date = DateTime.Today;
+            Task newTask = new Task { Title = "Task Title", Description = "Task Description", Time = "Task Time" };
+            taskManager.AddTask(date, newTask);
         }
 
 
@@ -53,16 +56,4 @@ namespace Productivity
     }
 
 
-    // Task class representing a task with a name
-    class Task
-    {
-        public string Name { get; set; }
-        bool IsCompleted { get; set; }
-
-        public Task(string name)
-        {
-            Name = name;
-            IsCompleted = false;
-        }
-    }
 }

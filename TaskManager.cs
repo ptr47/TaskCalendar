@@ -5,42 +5,48 @@ namespace Productivity
 {
     internal class TaskManager
     {
-        private Dictionary<DateTime, List<Task>> tasksByDate;
-        private string filePath;
+        private readonly string dirPath;
 
-        public TaskManager(string filePath)
+        public TaskManager(string dirPath)
         {
-            this.filePath = filePath;
-            tasksByDate = LoadTasks();
+            this.dirPath = dirPath;
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
         }
-
-        public Dictionary<DateTime, List<Task>> TasksByDate => tasksByDate;
 
         public void AddTask(DateTime date, Task task)
         {
-            if (!tasksByDate.ContainsKey(date))
-            {
-                tasksByDate[date] = new List<Task>();
-            }
-            tasksByDate[date].Add(task);
-            SaveTasks();
+            string filePath = GetFilePath(date);
+            List<Task> tasks = LoadTasks(filePath);
+            tasks.Add(task);
+            SaveTasks(filePath, tasks);
         }
-
-        private Dictionary<DateTime, List<Task>> LoadTasks()
+        private string GetFilePath(DateTime date)
+        {
+            string fileName = $"tasks-{date:yyyy-MM}.json";
+            return Path.Combine(dirPath, fileName);
+        }
+        private static List<Task> LoadTasks(string filePath)
         {
             if (File.Exists(filePath))
             {
                 string json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<Dictionary<DateTime, List<Task>>>(json);
+                return JsonConvert.DeserializeObject<List<Task>>(json);
             }
-            return new Dictionary<DateTime, List<Task>>();
+            return [];
         }
 
-        private void SaveTasks()
+        private static void SaveTasks(string filePath, List<Task> tasks)
         {
-            string json = JsonConvert.SerializeObject(tasksByDate, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(tasks, Formatting.Indented);
             File.WriteAllText(filePath, json);
         }
     }
-
+    public class Task(string description, TimeSpan time)
+    {
+        public string Description { get; set; } = description;
+        public TimeSpan Time { get; set; } = time;
+    }
 }
