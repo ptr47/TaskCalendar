@@ -31,16 +31,16 @@ namespace Productivity
             {
                 try
                 {
-                    Dictionary<DateTime,Task> tasks = LoadTasks(filePath);
-                    tasks.Add(date,task);
-                    if (SaveTasks(filePath, tasks))
+                    Dictionary<DateTime, List<Task>> tasks = LoadTasks(filePath);
+                    if (tasks.TryGetValue(date, out List<Task>? value))
                     {
-                        return true;
+                        value.Add(task);
                     }
                     else
                     {
-                        return false;
+                        tasks[date] = [task];
                     }
+                    return SaveTasks(filePath, tasks);
                 }
                 catch (Exception ex)
                 {
@@ -51,22 +51,27 @@ namespace Productivity
             return false; // if something fails return false
         }
 
+        public List<Task> GetTasks(DateTime date)
+        {
+            string filePath = GetFilePath(date);
+            return [];
+        }
         private string GetFilePath(DateTime date)
         {
             string fileName = $"tasks-{date:yyyy-MM}.json";
             return Path.Combine(dirPath, fileName);
         }
-        private static Dictionary<DateTime,Task> LoadTasks(string filePath)
+        private static Dictionary<DateTime, List<Task>> LoadTasks(string filePath)
         {
             if (File.Exists(filePath))
             {
                 string json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<Dictionary<DateTime,Task>>(json);
+                return JsonConvert.DeserializeObject<Dictionary<DateTime, List<Task>>>(json);
             }
             return [];
         }
 
-        private static bool SaveTasks(string filePath, Dictionary<DateTime,Task> tasks)
+        private static bool SaveTasks(string filePath, Dictionary<DateTime, List<Task>> tasks)
         {
             try
             {
