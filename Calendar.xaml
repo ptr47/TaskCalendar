@@ -26,9 +26,9 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="←" Padding="5" Click="ShowPreviousMonth" Margin="3"/>
-            <Label x:Name="currentMonth_lbl" Content="Miesiac" Foreground="WhiteSmoke" Margin="2" FontSize="18"/>
-            <Button Content="→" Padding="5" Click="ShowNextMonth" Margin="3"/>
+            <Button Content="←" Padding="5" Click="ShowPreviousMonth" Style="{StaticResource ButtonStyle}"/>
+            <TextBlock x:Name="currentMonth_lbl" Text="Miesiac" Style="{StaticResource WeekdayLabelStyle}" FontSize="18" VerticalAlignment="Center"/>
+            <Button Content="→" Padding="5" Click="ShowNextMonth" Style="{StaticResource ButtonStyle}"/>
             <xctk:IntegerUpDown x:Name="yearIntUpDown" Width="Auto" Margin="30,5,5,5" FontFamily="Arial" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" ValueChanged="YearIntUpDown_ValueChanged"/>
         </StackPanel>
         <Grid x:Name="CalendarGrid" Grid.Row="1" />

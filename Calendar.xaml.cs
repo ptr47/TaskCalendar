@@ -110,7 +110,7 @@ namespace Productivity
         private void UpdateCalendar()
         {
             FillCalendar(displayedDate); // Generate the calendar for the new month
-            currentMonth_lbl.Content = displayedDate.ToString("MMMM");
+            currentMonth_lbl.Text = displayedDate.ToString("MMMM");
             yearIntUpDown.Value = displayedDate.Year;
         }
 
