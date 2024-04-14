@@ -48,7 +48,7 @@
             </Grid.RowDefinitions>
 
             <!-- TextBlocks for weekdays with alternating background colors -->
-            <TextBlock Grid.Column="0" Text="Mon" Style="{StaticResource WeekdayLabelStyle}" Background="#3a3a3a" />
+            <TextBlock Grid.Column="0" Text="Mon" Style="{StaticResource WeekdayLabelStyle}" />
             <TextBlock Grid.Column="1" Text="Tue" Style="{StaticResource WeekdayLabelStyle}" />
             <TextBlock Grid.Column="2" Text="Wed" Style="{StaticResource WeekdayLabelStyle}" />
             <TextBlock Grid.Column="3" Text="Thu" Style="{StaticResource WeekdayLabelStyle}" />
@@ -57,13 +57,13 @@
             <TextBlock Grid.Column="6" Text="Sun" Style="{StaticResource WeekdayLabelStyle}" />
 
             <!-- StackPanel elements for tasks -->
-            <StackPanel x:Name="Monday_StackPanel" Grid.Column="0" Grid.Row="1" />
-            <StackPanel x:Name="Tuesday_StackPanel" Grid.Column="1" Grid.Row="1" />
-            <StackPanel x:Name="Wednesday_StackPanel" Grid.Column="2" Grid.Row="1" />
-            <StackPanel x:Name="Thursday_StackPanel" Grid.Column="3" Grid.Row="1" />
-            <StackPanel x:Name="Friday_StackPanel" Grid.Column="4" Grid.Row="1" />
-            <StackPanel x:Name="Saturday_StackPanel" Grid.Column="5" Grid.Row="1" />
-            <StackPanel x:Name="Sunday_StackPanel" Grid.Column="6" Grid.Row="1" />
+            <StackPanel x:Name="Monday_StackPanel" Grid.Column="0" Grid.Row="1" Background="#4a4a4a"/>
+            <StackPanel x:Name="Tuesday_StackPanel" Grid.Column="1" Grid.Row="1" Background="#5a5a5a"/>
+            <StackPanel x:Name="Wednesday_StackPanel" Grid.Column="2" Grid.Row="1" Background="#4a4a4a" />
+            <StackPanel x:Name="Thursday_StackPanel" Grid.Column="3" Grid.Row="1" Background="#5a5a5a" />
+            <StackPanel x:Name="Friday_StackPanel" Grid.Column="4" Grid.Row="1"  Background="#4a4a4a"/>
+            <StackPanel x:Name="Saturday_StackPanel" Grid.Column="5" Grid.Row="1" Background="#5a5a5a" />
+            <StackPanel x:Name="Sunday_StackPanel" Grid.Column="6" Grid.Row="1" Background="#4a4a4a"/>
         </Grid>
 
 
