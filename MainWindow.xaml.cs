@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Productivity
@@ -16,9 +18,10 @@ namespace Productivity
         public MainWindow()
         {
             InitializeComponent();
+            ShowWeekTasks();
         }
 
-        private static void ShowWeekTasks()
+        private void ShowWeekTasks()
         {
             DateTime today = DateTime.Today;
             DateTime startDate = today.AddDays(-(today.DayOfWeek - DayOfWeek.Monday + 7) % 7);
@@ -36,13 +39,24 @@ namespace Productivity
             {
                 foreach (var task in weekTasks[date])
                 {
-                    AddTaskIndicator(date.DayOfWeek, task);
+
+                    this.AddTaskIndicator(date.DayOfWeek, task);
                 }
             }
         }
-        private static void AddTaskIndicator(DayOfWeek dayOfWeek, Task task)
+        private void AddTaskIndicator(DayOfWeek dayOfWeek, Task task)
         {
-            throw new NotImplementedException();
+            string stackPanelName = $"{dayOfWeek}_StackPanel";
+            if (weekCalendarGrid.FindName(stackPanelName) is StackPanel stackPanel)
+            {
+                TextBlock label = new()
+                {
+                    Text = task.Description,
+                    Background = Brushes.AliceBlue,
+                    Padding = new(5)
+                };
+                stackPanel.Children.Add(label);
+            }
         }
 
         private void NewTask_btn_Click(object sender, RoutedEventArgs e)

@@ -11,9 +11,20 @@ namespace Productivity
     public partial class Calendar : Window
     {
         private DateTime displayedDate;
+        private bool isSundayFirst = false;
+
         public Calendar()
         {
             InitializeComponent();
+            displayedDate = DateTime.Today;
+            GenerateCalendar();
+            UpdateCalendar();
+        }
+
+        public Calendar(bool isSundayFirst)
+        {
+            InitializeComponent();
+            this.isSundayFirst = isSundayFirst;
             displayedDate = DateTime.Today;
             GenerateCalendar();
             UpdateCalendar();
@@ -23,13 +34,13 @@ namespace Productivity
             // Add column and row definitions to the Grid
             for (int i = 0; i < 7; i++)
             {
-                CalendarGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                CalendarGrid.ColumnDefinitions.Add(new());
             }
 
-            CalendarGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto }); ;
+            CalendarGrid.RowDefinitions.Add(new() { Height = GridLength.Auto }); ;
             for (int i = 0; i < 5; i++)
             {
-                CalendarGrid.RowDefinitions.Add(new RowDefinition());
+                CalendarGrid.RowDefinitions.Add(new());
             }
 
         }
@@ -52,8 +63,8 @@ namespace Productivity
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(5),
-                    Padding = new Thickness(15,2,15,2),
+                    Margin = new(5),
+                    Padding = new(15,2,15,2),
                     Foreground = Brushes.WhiteSmoke,
                     Background = Brushes.Gray
                 };
@@ -73,7 +84,7 @@ namespace Productivity
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Top,
-                    Margin = new Thickness(2),
+                    Margin = new(2),
                     Foreground = Brushes.WhiteSmoke
                 };
 
