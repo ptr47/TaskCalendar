@@ -17,33 +17,38 @@ namespace Productivity
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="date">The date of the task.</param>
+        /// <param name="task">The task to be added.</param>
+        /// <returns><see langword="true"/> if the task was successfully added; otherwise, <see langword="false"/>.</returns>
+
         public bool AddTask(DateTime date, Task task)
         {
-            if (task == null)
-            {
-                return false; // Task cannot be null, return false
-            }
-
             string filePath = GetFilePath(date);
-            if (string.IsNullOrWhiteSpace(filePath))
+            if (!string.IsNullOrWhiteSpace(filePath))
             {
-                return false; // Invalid file path, return false
-            }
-
-            try
-            {
-                List<Task> tasks = LoadTasks(filePath);
-                tasks.Add(task);
-                if (SaveTasks(filePath, tasks))
+                try
                 {
-                    return true;
+                    Dictionary<DateTime,Task> tasks = LoadTasks(filePath);
+                    tasks.Add(date,task);
+                    if (SaveTasks(filePath, tasks))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
+            return false; // if something fails return false
         }
 
         private string GetFilePath(DateTime date)
@@ -51,17 +56,17 @@ namespace Productivity
             string fileName = $"tasks-{date:yyyy-MM}.json";
             return Path.Combine(dirPath, fileName);
         }
-        private static List<Task> LoadTasks(string filePath)
+        private static Dictionary<DateTime,Task> LoadTasks(string filePath)
         {
             if (File.Exists(filePath))
             {
                 string json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<List<Task>>(json);
+                return JsonConvert.DeserializeObject<Dictionary<DateTime,Task>>(json);
             }
             return [];
         }
 
-        private static bool SaveTasks(string filePath, List<Task> tasks)
+        private static bool SaveTasks(string filePath, Dictionary<DateTime,Task> tasks)
         {
             try
             {

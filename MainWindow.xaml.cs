@@ -12,14 +12,36 @@ namespace Productivity
         public DateTime FirstDayOfWeek { get; set; }
         public DateTime LastDayOfWeek { get; set; }
 
-        readonly TaskManager taskManager = new("TasksDirectory");
+        private static readonly TaskManager taskManager = new("dir/path");
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        //private static void ShowWeekTasks()
+        //{
+        //    DateTime today = DateTime.Today;
+        //    DateTime startDate = today.AddDays(-(today.DayOfWeek - DayOfWeek.Monday + 7) % 7);
+        //    DateTime endDate = startDate.AddDays(6);
 
+        //    for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        //    {
+        //        List<Task> tasks = taskManager.GetTasks(date);
+        //        tasksByDate[date] = tasks;
+        //    }
+
+        //    // Display tasks on the calendar
+        //    foreach (var date in tasksByDate.Keys)
+        //    {
+        //        List<Task> tasks = tasksByDate[date];
+        //        foreach (var task in tasks)
+        //        {
+        //            // Add visual indication for each task on the calendar
+        //            AddTaskIndicator(date, task);
+        //        }
+        //    }
+        //}
 
         private void NewTask_btn_Click(object sender, RoutedEventArgs e)
         {
