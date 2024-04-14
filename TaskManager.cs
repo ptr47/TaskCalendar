@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
+using System.Windows;
 
 namespace Productivity
 {
@@ -16,13 +17,35 @@ namespace Productivity
             }
         }
 
-        public void AddTask(DateTime date, Task task)
+        public bool AddTask(DateTime date, Task task)
         {
+            if (task == null)
+            {
+                return false; // Task cannot be null, return false
+            }
+
             string filePath = GetFilePath(date);
-            List<Task> tasks = LoadTasks(filePath);
-            tasks.Add(task);
-            SaveTasks(filePath, tasks);
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                return false; // Invalid file path, return false
+            }
+
+            try
+            {
+                List<Task> tasks = LoadTasks(filePath);
+                tasks.Add(task);
+                if (SaveTasks(filePath, tasks))
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
         }
+
         private string GetFilePath(DateTime date)
         {
             string fileName = $"tasks-{date:yyyy-MM}.json";
@@ -38,15 +61,42 @@ namespace Productivity
             return [];
         }
 
-        private static void SaveTasks(string filePath, List<Task> tasks)
+        private static bool SaveTasks(string filePath, List<Task> tasks)
         {
-            string json = JsonConvert.SerializeObject(tasks, Formatting.Indented);
-            File.WriteAllText(filePath, json);
+            try
+            {
+                if (string.IsNullOrWhiteSpace(filePath) || tasks == null)
+                {
+                    return false;
+                }
+
+                string json = JsonConvert.SerializeObject(tasks, Formatting.Indented);
+                File.WriteAllText(filePath, json);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false; // Error occurred, return false
+            }
         }
+
     }
-    public class Task(string description, TimeSpan time)
+    public class Task
     {
-        public string Description { get; set; } = description;
-        public TimeSpan Time { get; set; } = time;
+        public string Description { get; set; }
+        public TimeSpan Time { get; set; }
+
+        public Task(string description, TimeSpan time)
+        {
+            Description = description;
+            Time = time;
+        }
+
+        public Task()
+        {
+            Description = "Default";
+            Time = TimeSpan.Zero;
+        }
     }
 }

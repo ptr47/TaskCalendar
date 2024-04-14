@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Productivity
 {
@@ -11,32 +12,20 @@ namespace Productivity
         public DateTime FirstDayOfWeek { get; set; }
         public DateTime LastDayOfWeek { get; set; }
 
+        readonly TaskManager taskManager = new("TasksDirectory");
+
         public MainWindow()
         {
             InitializeComponent();
-            TaskManager taskManager = new TaskManager("TasksDirectory");
-            DateTime date = DateTime.Today;
-            Task newTask = new Task { Title = "Task Title", Description = "Task Description", Time = "Task Time" };
-            taskManager.AddTask(date, newTask);
         }
 
 
-        // Method to retrieve tasks for a specific date from the dictionary
-        static List<Task> GetTasksForDate(Dictionary<DateTime, List<Task>> tasksByDate, DateTime date)
-        {
-            if (tasksByDate.ContainsKey(date))
-            {
-                return tasksByDate[date];
-            }
-            else
-            {
-                return [];
-            }
-        }
 
         private void NewTask_btn_Click(object sender, RoutedEventArgs e)
         {
-
+            DateTime date = DateTime.Today;
+            Task newTask = new("Description", TimeSpan.Zero);
+            taskManager.AddTask(date, newTask);
         }
 
         private void ViewCalendar_btn_Click(object sender, RoutedEventArgs e)
