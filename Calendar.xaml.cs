@@ -53,7 +53,9 @@ namespace Productivity
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(5),
-                    Foreground = Brushes.WhiteSmoke
+                    Padding = new Thickness(15,2,15,2),
+                    Foreground = Brushes.WhiteSmoke,
+                    Background = Brushes.Gray
                 };
                 Grid.SetColumn(dayLabel, i);
                 Grid.SetRow(dayLabel, 0);
