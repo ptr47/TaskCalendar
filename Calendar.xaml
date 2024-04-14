@@ -7,11 +7,9 @@
         xmlns:local="clr-namespace:Productivity"
         mc:Ignorable="d"
         Title="Calendar" Height="450" Width="800"
-        Background="#393939">
+        Background="#292929">
     <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Arial"/>
-        </Style>
+        
         <Style TargetType="Button">
             <Setter Property="FontFamily" Value="Arial"/>
         </Style>
@@ -29,7 +27,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="←" Padding="5" Click="ShowPreviousMonth" Margin="3"/>
-            <Label x:Name="currentMonth_lbl" Content="Miesiac" Foreground="WhiteSmoke" Margin="3" FontSize="16" FontFamily="Arial"/>
+            <Label x:Name="currentMonth_lbl" Content="Miesiac" Foreground="WhiteSmoke" Margin="2" FontSize="18"/>
             <Button Content="→" Padding="5" Click="ShowNextMonth" Margin="3"/>
             <xctk:IntegerUpDown x:Name="yearIntUpDown" Width="Auto" Margin="30,5,5,5" FontFamily="Arial" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" ValueChanged="YearIntUpDown_ValueChanged"/>
         </StackPanel>
