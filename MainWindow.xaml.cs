@@ -26,10 +26,16 @@ namespace Productivity
                 stackPanel.Children.Clear();
             }
         }
-
+        private void UpdateStats()
+        {
+            TotalTasksTextBlock.Text = $"Total Tasks: {taskManager.TotalTasks}";
+            CompletedTasksTextBlock.Text = $"Completed Tasks: {taskManager.CompletedTasks}";
+            IncompleteTasksTextBlock.Text = $"Incomplete Tasks: {taskManager.IncompleteTasks}";
+        }
         private void UpdateMainView()
         {
             ClearCalendar();
+            UpdateStats();
             DateTime today = DateTime.Today;
             DateTime startDate = today.AddDays(-(today.DayOfWeek - DayOfWeek.Monday + 7) % 7);
             DateTime endDate = startDate.AddDays(6);
@@ -83,7 +89,7 @@ namespace Productivity
                                                  // Update the task in the task manager or wherever it's stored
                                                  // Assuming you have a method to update the task status
                         TaskManager.UpdateTask(date, task);
-
+                        taskManager.UpdateStatistics(UpdateMode.Complete);
                         // Refresh the UI
                         UpdateMainView();
                     }
@@ -96,6 +102,7 @@ namespace Productivity
                     {
                         // Delete the task
                         TaskManager.DeleteTask(date, task);
+                        taskManager.UpdateStatistics(UpdateMode.Delete);
                         // Refresh the UI
                         UpdateMainView();
                     }
@@ -117,7 +124,45 @@ namespace Productivity
             DayOfWeek.Sunday => Sunday_StackPanel,
             _ => Sunday_StackPanel,
         };
+        private void ChangeDayOrder()
+        {
+            foreach (var child in weekCalendarGrid.Children)
+            {
+                if (child is StackPanel stackPanel)
+                {
+                    // Get the current column index
+                    int currentColumn = Grid.GetColumn(stackPanel);
 
+                    // Adjust the column index based on the flag
+                    int newColumn = startOnSunday ? (currentColumn - 1 + 7) % 7 : (currentColumn + 1) % 7;
+                    Grid.SetColumn(stackPanel, newColumn);
+
+                    // Adjust background color
+                    stackPanel.Background = (newColumn % 2 == 0) ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4a4a4a")) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5a5a5a"));
+                }
+                if (child is TextBlock textBlock)
+                {
+                    // Get the current column index
+                    int currentColumn = Grid.GetColumn(textBlock);
+
+                    int newColumn = startOnSunday ? (currentColumn - 1 + 7) % 7 : (currentColumn + 1) % 7;
+
+                    // Set the new column index
+                    Grid.SetColumn(textBlock, newColumn);
+
+                }
+            }
+            if ((string)Settings_btn.Content == "Setting - Monday")
+            {
+                Settings_btn.Content = "Setting - Sunday";
+            }
+            else
+            {
+                Settings_btn.Content = "Setting - Monday";
+            }
+
+            startOnSunday = !startOnSunday;
+        }
         private void NewTask_btn_Click(object sender, RoutedEventArgs e)
         {
             AddTask addTask = new();
@@ -126,6 +171,7 @@ namespace Productivity
             TimeSpan time = addTask.Time;
             Task newTask = new(addTask.Description, time);
             TaskManager.AddTask(date, newTask);
+            taskManager.UpdateStatistics(UpdateMode.Add);
             UpdateMainView();
         }
 
@@ -136,7 +182,7 @@ namespace Productivity
 
         private void Settings_btn_Click(object sender, RoutedEventArgs e)
         {
-            UpdateMainView();
+            ChangeDayOrder();
         }
     }
 

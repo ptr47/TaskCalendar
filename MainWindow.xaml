@@ -23,7 +23,7 @@
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Top" Margin="0,0,10,0">
             <Button x:Name="NewTask_btn" Content="New Task" Click="NewTask_btn_Click" Style="{StaticResource ButtonStyle}" />
             <Button x:Name="ViewCalendar_btn" Content="View Calendar" Click="ViewCalendar_btn_Click" Style="{StaticResource ButtonStyle}" />
-            <Button x:Name="Settings_btn" Content="Settings" Click="Settings_btn_Click" Style="{StaticResource ButtonStyle}" />
+            <Button x:Name="Settings_btn" Content="Setting - Monday" Click="Settings_btn_Click" Style="{StaticResource ButtonStyle}" />
         </StackPanel>
 
         <!-- Calendar Grid -->
@@ -69,10 +69,10 @@
 
 
         <!-- Right Panel with Statistics -->
-        <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Top" Margin="10" Background="#4A4A4A">
-            <TextBlock x:Name="TotalTasksTextBlock" Padding="5" FontSize="18"/>
-            <TextBlock x:Name="CompletedTasksTextBlock" Padding="5"/>
-            <TextBlock x:Name="IncompleteTasksTextBlock" Padding="5"/>
+        <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Top" Margin="5,10" Background="#4A4A4A">
+            <TextBlock x:Name="TotalTasksTextBlock" Padding="2,5" FontSize="18" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="CompletedTasksTextBlock" Padding="2,5" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="IncompleteTasksTextBlock" Padding="2,5" HorizontalAlignment="Center"/>
         </StackPanel>
 
     </Grid>

@@ -24,6 +24,7 @@ namespace Productivity
             {
                 Directory.CreateDirectory(dirPath);
             }
+            LoadStatistics();
         }
         public void UpdateStatistics(UpdateMode mode)
         {
@@ -42,10 +43,11 @@ namespace Productivity
                 TotalTasks--;
                 CompletedTasks--;
             }
+            SaveStatistics();
         }
         private bool LoadStatistics()
         {
-            string filePath = dirPath + "statistics.json";
+            string filePath = Path.Combine(dirPath,"statistics.json");
             if (File.Exists(filePath))
             {
                 string json = File.ReadAllText(filePath);
@@ -66,12 +68,13 @@ namespace Productivity
             }
             else
             {
+                File.Create(filePath);
                 return false;
             }
         }
         private bool SaveStatistics()
         {
-            string filePath = dirPath + "statistics.json";
+            string filePath = Path.Combine(dirPath, "statistics.json");
             try
             {
                 List<int> stats = [TotalTasks, CompletedTasks, IncompleteTasks];

@@ -24,7 +24,7 @@
             <Setter Property="Foreground" Value="WhiteSmoke"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Padding" Value="5,10"/>
             <Setter Property="Background" Value="#4A4A4A"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontWeight" Value="Bold"/>
