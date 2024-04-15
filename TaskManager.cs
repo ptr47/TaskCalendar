@@ -74,8 +74,36 @@ namespace Productivity
             }
             return false; // if something fails return false
         }
+        public bool UpdateTask(DateTime time, Task taskToUpdate)
+        {
+            string filePath = GetFilePath(time);
+            if (!string.IsNullOrWhiteSpace(filePath))
+            {
+                try
+                {
+                    Dictionary<DateTime, List<Task>> tasks = LoadTasks(filePath);
+                    if (tasks.TryGetValue(time, out List<Task>? taskList))
+                    {
+                        Task task = taskList.FirstOrDefault(t => t.Description == taskToUpdate.Description && t.Time == taskToUpdate.Time);
 
+                        if (task != null)
+                        {
+                            // Toggle the completion status
+                            task.IsCompleted = !task.IsCompleted;
 
+                            // Save the changes
+                            return SaveTasks(filePath, tasks);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
+            }
+            return false; // if something fails return false
+        }
         public List<Task> GetTasks(DateTime date)
         {
             string filePath = GetFilePath(date);
@@ -121,22 +149,25 @@ namespace Productivity
             }
         }
 
+
     }
     public class Task
     {
         public string Description { get; set; }
         public TimeSpan Time { get; set; }
-
+        public bool IsCompleted { get; set; }
         public Task(string description, TimeSpan time)
         {
             Description = description;
             Time = time;
+            IsCompleted = false;
         }
 
         public Task()
         {
             Description = "Default";
             Time = TimeSpan.Zero;
+            IsCompleted = false;
         }
     }
 }

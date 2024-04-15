@@ -64,14 +64,35 @@ namespace Productivity
 
             taskLabel.MouseLeftButtonUp += (sender, e) =>
             {
-                MessageBoxResult result = MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time).ToString("hh:mm tt")}\n\nDo you want to delete this task?", "Task Information", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
+                if (!task.IsCompleted)
                 {
-                    taskManager.DeleteTask(date, task);
-                    ShowWeekTasks();
+                    MessageBoxResult result = MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time).ToString("hh:mm tt")}\n\nDo you want to mark this task as completed?", "Task Information", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        task.IsCompleted = true; // Mark the task as completed
+                                                 // Update the task in the task manager or wherever it's stored
+                                                 // Assuming you have a method to update the task status
+                        taskManager.UpdateTask(date, task);
+
+                        // Refresh the UI
+                        ShowWeekTasks();
+                    }
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time).ToString("hh:mm tt")}\n\nDo you want to delete this task?", "Task Information", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Delete the task
+                        taskManager.DeleteTask(date, task);
+                        // Refresh the UI
+                        ShowWeekTasks();
+                    }
                 }
             };
+
 
             GetStackPanel(dayOfWeek).Children.Add(taskLabel);
         }
