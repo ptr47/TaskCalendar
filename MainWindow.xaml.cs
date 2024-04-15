@@ -45,11 +45,11 @@ namespace Productivity
 
                 foreach (var task in weekTasks[date])
                 {
-                    AddTaskIndicator(date.DayOfWeek, task);
+                    AddTaskIndicator(date.DayOfWeek, task, date);
                 }
             }
         }
-        private void AddTaskIndicator(DayOfWeek dayOfWeek, Task task)
+        private void AddTaskIndicator(DayOfWeek dayOfWeek, Task task, DateTime date)
         {
             Label taskLabel = new()
             {
@@ -68,8 +68,8 @@ namespace Productivity
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    // Delete the task
-                    // You need to implement the logic to delete the task here
+                    taskManager.DeleteTask(date, task);
+                    ShowWeekTasks();
                 }
             };
 

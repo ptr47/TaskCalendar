@@ -23,7 +23,6 @@ namespace Productivity
         /// <param name="date">The date of the task.</param>
         /// <param name="task">The task to be added.</param>
         /// <returns><see langword="true"/> if the task was successfully added; otherwise, <see langword="false"/>.</returns>
-
         public bool AddTask(DateTime date, Task task)
         {
             string filePath = GetFilePath(date);
@@ -50,6 +49,32 @@ namespace Productivity
             }
             return false; // if something fails return false
         }
+
+        public bool DeleteTask(DateTime time, Task task)
+        {
+            string filePath = GetFilePath(time);
+            if (!string.IsNullOrWhiteSpace(filePath))
+            {
+                try
+                {
+                    Dictionary<DateTime, List<Task>> tasks = LoadTasks(filePath);
+                    if (tasks.TryGetValue(time, out List<Task>? value))
+                    {
+                        if (value.RemoveAll(t => t.Description == task.Description && t.Time == task.Time) > 0)
+                        {
+                            return SaveTasks(filePath, tasks);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
+            }
+            return false; // if something fails return false
+        }
+
 
         public List<Task> GetTasks(DateTime date)
         {
