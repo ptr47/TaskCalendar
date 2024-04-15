@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Productivity"
         mc:Ignorable="d"
-        Title="AddTask" Height="450" Width="800">
+        Title="AddTask" Height="250" Width="400"
+        Background="#aaa">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="descriptionTextBoxx" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Stretch" Background="#aaaaaa" FontSize="15"/>
+        <DatePicker x:Name="datePicker" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <Button Content="Add Task" Grid.Row="2" Background="#4a4a4a" Click="Button_Click"/>
     </Grid>
 </Window>

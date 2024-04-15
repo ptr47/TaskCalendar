@@ -19,9 +19,18 @@ namespace Productivity
     /// </summary>
     public partial class AddTask : Window
     {
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
         public AddTask()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Description = descriptionTextBoxx.Text;
+            Date = datePicker.DisplayDate;
+            Close();
         }
     }
 }
