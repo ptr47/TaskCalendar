@@ -11,14 +11,13 @@ namespace Productivity
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static Dictionary<DateTime, List<Task>> weekTasks;
+        private static Dictionary<DateTime, List<Task>> weekTasks = [];
 
-        private static readonly TaskManager taskManager = new("dir/path");
+        private static readonly TaskManager taskManager = new("C:\\Users\\vboxuser\\Documents\\TasksPath");
 
         public MainWindow()
         {
             InitializeComponent();
-            ShowWeekTasks();
         }
 
         private void ShowWeekTasks()
@@ -40,23 +39,38 @@ namespace Productivity
                 foreach (var task in weekTasks[date])
                 {
 
-                    this.AddTaskIndicator(date.DayOfWeek, task);
+                    AddTaskIndicator(date.DayOfWeek, task);
                 }
             }
         }
         private void AddTaskIndicator(DayOfWeek dayOfWeek, Task task)
         {
-            string stackPanelName = $"{dayOfWeek}_StackPanel";
-            if (weekCalendarGrid.FindName(stackPanelName) is StackPanel stackPanel)
+            StackPanel stackPanel = GetStackPanel(dayOfWeek);
+            if (stackPanel != null)
             {
-                TextBlock label = new()
+                Label label = new()
                 {
-                    Text = task.Description,
-                    Background = Brushes.AliceBlue,
-                    Padding = new(5)
+                    Content = task.Description
+
                 };
                 stackPanel.Children.Add(label);
             }
+        }
+        private StackPanel GetStackPanel(DayOfWeek dayOfWeek)
+        {
+#pragma warning disable CS8603 // Possible null reference return.
+            return dayOfWeek switch
+            {
+                DayOfWeek.Monday => Monday_StackPanel,
+                DayOfWeek.Tuesday => Tuesday_StackPanel,
+                DayOfWeek.Wednesday => Wednesday_StackPanel,
+                DayOfWeek.Thursday => Thursday_StackPanel,
+                DayOfWeek.Friday => Friday_StackPanel,
+                DayOfWeek.Saturday => Saturday_StackPanel,
+                DayOfWeek.Sunday => Sunday_StackPanel,
+                _ => null,
+            };
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         private void NewTask_btn_Click(object sender, RoutedEventArgs e)
@@ -73,7 +87,7 @@ namespace Productivity
 
         private void Settings_btn_Click(object sender, RoutedEventArgs e)
         {
-
+            ShowWeekTasks();
         }
     }
 

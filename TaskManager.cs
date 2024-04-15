@@ -54,6 +54,11 @@ namespace Productivity
         public List<Task> GetTasks(DateTime date)
         {
             string filePath = GetFilePath(date);
+            Dictionary<DateTime, List<Task>> tasksByDate = LoadTasks(filePath);
+            if (tasksByDate != null && tasksByDate.TryGetValue(date, out List<Task>? value))
+            {
+                return value;
+            }
             return [];
         }
         private string GetFilePath(DateTime date)
