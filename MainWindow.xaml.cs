@@ -26,7 +26,7 @@ namespace Productivity
                 stackPanel.Children.Clear();
             }
         }
-        
+
         private void UpdateMainView()
         {
             ClearCalendar();
