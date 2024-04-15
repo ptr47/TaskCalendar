@@ -6,7 +6,6 @@
     <Application.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="Foreground" Value="WhiteSmoke"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
         <Style x:Key="WeekdayLabelStyle" TargetType="TextBlock">

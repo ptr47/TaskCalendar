@@ -70,9 +70,9 @@
 
         <!-- Right Panel with Statistics -->
         <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Top" Margin="5,10" Background="#4A4A4A">
-            <TextBlock x:Name="TotalTasksTextBlock" Padding="2,5" FontSize="18" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="CompletedTasksTextBlock" Padding="2,5" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="IncompleteTasksTextBlock" Padding="2,5" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="TotalTasksTextBlock" Padding="2,5" FontSize="18" HorizontalAlignment="Center" Foreground="WhiteSmoke"/>
+            <TextBlock x:Name="CompletedTasksTextBlock" Padding="2,5" HorizontalAlignment="Center" Foreground="WhiteSmoke"/>
+            <TextBlock x:Name="IncompleteTasksTextBlock" Padding="2,5" HorizontalAlignment="Center" Foreground="WhiteSmoke"/>
         </StackPanel>
 
     </Grid>

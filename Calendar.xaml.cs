@@ -88,6 +88,7 @@ namespace Productivity
 
             for (int day = 1; day <= daysInMonth; day++)
             {
+                var selectedDate = new DateTime(displayedDate.Year, displayedDate.Month, day);
                 TextBlock dayNumber = new()
                 {
                     Text = day.ToString(),
@@ -99,13 +100,13 @@ namespace Productivity
                 };
                 TextBlock tasksCount = new()
                 {
-                    Text = TaskManager.GetTaskNumber(new DateTime(displayedDate.Year,displayedDate.Month,day)).ToString(),
+                    Text = TaskManager.GetTaskNumber(selectedDate).ToString(),
                     FontWeight = FontWeights.Bold,
                     FontSize = 15,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Margin = new Thickness(2),
-                    Foreground = Brushes.GreenYellow
+                    Foreground = selectedDate < DateTime.Today ? Brushes.Red : Brushes.GreenYellow
                 };
 
                 // Create a stack panel to hold the day number and tasks count
@@ -120,6 +121,10 @@ namespace Productivity
                 stackPanel.Children.Add(tasksCount);
                 Grid.SetColumn(stackPanel, col);
                 Grid.SetRow(stackPanel, row);
+                stackPanel.MouseLeftButtonUp += (s, _) =>
+                {
+                    new TaskView(TaskManager.GetTasks(selectedDate),selectedDate).ShowDialog();
+                };
                 CalendarGrid.Children.Add(stackPanel);
 
                 col++;
@@ -130,6 +135,12 @@ namespace Productivity
                 }
             }
         }
+
+        private void StackPanel_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void ShowPreviousMonth(object sender, RoutedEventArgs e)
         {
             if (!(displayedDate.Year == 1 && displayedDate.Month == 1))

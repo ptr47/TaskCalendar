@@ -8,25 +8,26 @@ namespace Productivity
     {
         Add,
         Complete,
+        Uncomplete,
         Delete
     }
     internal class TaskManager
     {
         private static string dirPath;
-        public int TotalTasks { get; set; }
-        public int CompletedTasks { get; set; }
-        public int IncompleteTasks { get; set; }
+        public static int TotalTasks { get; set; }
+        public static int CompletedTasks { get; set; }
+        public static int IncompleteTasks { get; set; }
 
-        public TaskManager(string dirPath)
+        public TaskManager()
         {
-            TaskManager.dirPath = dirPath;
+            dirPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TasksData");
             if (!Directory.Exists(dirPath))
             {
                 Directory.CreateDirectory(dirPath);
             }
             LoadStatistics();
         }
-        public void UpdateStatistics(UpdateMode mode)
+        public static void UpdateStatistics(UpdateMode mode)
         {
             if (mode == UpdateMode.Add)
             {
@@ -38,6 +39,11 @@ namespace Productivity
                 IncompleteTasks--;
                 CompletedTasks++;
             }
+            else if (mode == UpdateMode.Uncomplete)
+            {
+                IncompleteTasks++;
+                CompletedTasks--;
+            }
             else if (mode == UpdateMode.Delete)
             {
                 TotalTasks--;
@@ -45,7 +51,7 @@ namespace Productivity
             }
             SaveStatistics();
         }
-        private bool LoadStatistics()
+        private static bool LoadStatistics()
         {
             string filePath = Path.Combine(dirPath,"statistics.json");
             if (File.Exists(filePath))
@@ -72,7 +78,7 @@ namespace Productivity
                 return false;
             }
         }
-        private bool SaveStatistics()
+        private static bool SaveStatistics()
         {
             string filePath = Path.Combine(dirPath, "statistics.json");
             try
@@ -239,11 +245,13 @@ namespace Productivity
         public string Description { get; set; }
         public TimeSpan Time { get; set; }
         public bool IsCompleted { get; set; }
+        internal readonly uint id;
         public Task(string description, TimeSpan time)
         {
             Description = description;
             Time = time;
             IsCompleted = false;
+            id = (uint)new Random().Next();
         }
 
         public Task()
@@ -251,6 +259,7 @@ namespace Productivity
             Description = "Default";
             Time = TimeSpan.Zero;
             IsCompleted = false;
+            id = (uint)new Random().Next();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Productivity
     {
         private static Dictionary<DateTime, List<Task>> weekTasks = [];
 
-        private static readonly TaskManager taskManager = new("C:\\Users\\vboxuser\\Documents\\TasksPath");
+        private static readonly TaskManager taskManager = new();
         private static bool startOnSunday = false;
 
         public MainWindow()
@@ -28,9 +28,9 @@ namespace Productivity
         }
         private void UpdateStats()
         {
-            TotalTasksTextBlock.Text = $"Total Tasks: {taskManager.TotalTasks}";
-            CompletedTasksTextBlock.Text = $"Completed Tasks: {taskManager.CompletedTasks}";
-            IncompleteTasksTextBlock.Text = $"Incomplete Tasks: {taskManager.IncompleteTasks}";
+            TotalTasksTextBlock.Text = $"Total Tasks: {TaskManager.TotalTasks}";
+            CompletedTasksTextBlock.Text = $"Completed Tasks: {TaskManager.CompletedTasks}";
+            IncompleteTasksTextBlock.Text = $"Incomplete Tasks: {TaskManager.IncompleteTasks}";
         }
         private void UpdateMainView()
         {
@@ -57,12 +57,12 @@ namespace Productivity
                 }
             }
         }
-        private void AddTaskIndicator(DayOfWeek dayOfWeek, Task task, DateTime date)
+        public void AddTaskIndicator(DayOfWeek dayOfWeek, Task task, DateTime date)
         {
             Label taskLabel = new()
             {
                 Content = $"{DateTime.Today.Add(task.Time):HH:mm}\n{task.Description}",
-                Foreground = Brushes.White,
+                Foreground = date < DateTime.Today ? Brushes.Red : Brushes.WhiteSmoke,
                 Padding = new(2),
                 Margin = new(2),
                 HorizontalContentAlignment = HorizontalAlignment.Left,
@@ -77,36 +77,50 @@ namespace Productivity
                 taskLabel.Background = Brushes.DimGray;
             }
 
-            taskLabel.MouseLeftButtonUp += (sender, e) =>
+            taskLabel.MouseRightButtonUp += (sender, e) =>
             {
-                if (!task.IsCompleted)
-                {
-                    MessageBoxResult result = MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time).ToString("hh:mm tt")}\n\nDo you want to mark this task as completed?", "Task Information", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                ContextMenu contextMenu = new();
 
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        task.IsCompleted = true; // Mark the task as completed
-                                                 // Update the task in the task manager or wherever it's stored
-                                                 // Assuming you have a method to update the task status
-                        TaskManager.UpdateTask(date, task);
-                        taskManager.UpdateStatistics(UpdateMode.Complete);
-                        // Refresh the UI
-                        UpdateMainView();
-                    }
-                }
-                else
+                MenuItem showMenuItem = new()
                 {
-                    MessageBoxResult result = MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time).ToString("hh:mm tt")}\n\nDo you want to delete this task?", "Task Information", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    Header = "Show"
+                };
+                showMenuItem.Click += (s, _) =>
+                {
+                    MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time):HH:mm}", "Task Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                };
+                contextMenu.Items.Add(showMenuItem);
 
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        // Delete the task
-                        TaskManager.DeleteTask(date, task);
-                        taskManager.UpdateStatistics(UpdateMode.Delete);
-                        // Refresh the UI
-                        UpdateMainView();
-                    }
-                }
+                MenuItem completeMenuItem = new()
+                {
+                    Header = "Complete"
+                };
+                completeMenuItem.Click += (s, _) =>
+                {
+                    task.IsCompleted = true;
+                    TaskManager.UpdateTask(date, task);
+                    TaskManager.UpdateStatistics(UpdateMode.Complete);
+                    MessageBox.Show("Task completed!");
+                    UpdateMainView();
+                };
+                contextMenu.Items.Add(completeMenuItem);
+
+                // Add "Delete" option
+                MenuItem deleteMenuItem = new()
+                {
+                    Header = "Delete"
+                };
+                deleteMenuItem.Click += (s, _) =>
+                {
+                    TaskManager.DeleteTask(date, task);
+                    TaskManager.UpdateStatistics(UpdateMode.Delete);
+                    MessageBox.Show("Task deleted!");
+                    UpdateMainView();
+                };
+                contextMenu.Items.Add(deleteMenuItem);
+
+                // Show the ContextMenu at the mouse position
+                contextMenu.IsOpen = true;
             };
 
 
@@ -171,7 +185,7 @@ namespace Productivity
             TimeSpan time = addTask.Time;
             Task newTask = new(addTask.Description, time);
             TaskManager.AddTask(date, newTask);
-            taskManager.UpdateStatistics(UpdateMode.Add);
+            TaskManager.UpdateStatistics(UpdateMode.Add);
             UpdateMainView();
         }
 

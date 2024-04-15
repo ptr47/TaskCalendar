@@ -7,20 +7,22 @@
         xmlns:local="clr-namespace:Productivity"
         mc:Ignorable="d"
         Title="AddTask" Height="250" Width="400"
-        Background="#aaa">
+        Background="#292929">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="descriptionTextBoxx" TextWrapping="Wrap" Text="..." VerticalAlignment="Stretch" Background="#bababa" FontSize="15"/>
+        <TextBox x:Name="descriptionTextBoxx" TextWrapping="Wrap" Text="..." VerticalAlignment="Stretch" Background="#bababa" Margin="10" FontSize="15"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label Content="H:" Foreground="WhiteSmoke"/>
             <xctk:IntegerUpDown Text="0" x:Name="hourIntUpDown" Width="Auto" FontFamily="Arial" FontSize="16" TextAlignment="Center" ValueChanged="HourIntUpDown_ValueChanged" />
+            <Label Content="M:" Foreground="WhiteSmoke"/>
             <xctk:IntegerUpDown Text="0" x:Name="minuteIntUpDown" Width="Auto" FontFamily="Arial" FontSize="16" TextAlignment="Center" ValueChanged="MinuteIntUpDown_ValueChanged"/>
             <DatePicker x:Name="datePicker" Grid.Row="1" Foreground="Black"/>
         </StackPanel>
 
-        <Button Content="Add Task" Grid.Row="2" Background="#4a4a4a" Click="Button_Click"/>
+        <Button Content="Add Task" Grid.Row="2" Style="{StaticResource ButtonStyle}" Click="Button_Click"/>
     </Grid>
 </Window>
