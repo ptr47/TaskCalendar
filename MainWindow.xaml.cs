@@ -16,7 +16,7 @@ namespace Productivity
         public MainWindow()
         {
             InitializeComponent();
-            ShowWeekTasks();
+            UpdateMainView();
         }
         private void ClearCalendar()
         {
@@ -25,7 +25,8 @@ namespace Productivity
                 stackPanel.Children.Clear();
             }
         }
-        private void ShowWeekTasks()
+        
+        private void UpdateMainView()
         {
             ClearCalendar();
             DateTime today = DateTime.Today;
@@ -55,12 +56,19 @@ namespace Productivity
             {
                 Content = $"{DateTime.Today.Add(task.Time):HH:mm}\n{task.Description}",
                 Foreground = Brushes.White,
-                Background = Brushes.DimGray,
                 Padding = new(2),
                 Margin = new(2),
                 HorizontalContentAlignment = HorizontalAlignment.Left,
                 VerticalContentAlignment = VerticalAlignment.Center
             };
+            if (task.IsCompleted)
+            {
+                taskLabel.Background = Brushes.ForestGreen;
+            }
+            else
+            {
+                taskLabel.Background = Brushes.DimGray;
+            }
 
             taskLabel.MouseLeftButtonUp += (sender, e) =>
             {
@@ -76,7 +84,7 @@ namespace Productivity
                         taskManager.UpdateTask(date, task);
 
                         // Refresh the UI
-                        ShowWeekTasks();
+                        UpdateMainView();
                     }
                 }
                 else
@@ -88,7 +96,7 @@ namespace Productivity
                         // Delete the task
                         taskManager.DeleteTask(date, task);
                         // Refresh the UI
-                        ShowWeekTasks();
+                        UpdateMainView();
                     }
                 }
             };
@@ -118,7 +126,7 @@ namespace Productivity
             Task newTask = new(addTask.Description, time);
             MessageBox.Show(date.ToString());
             taskManager.AddTask(date, newTask);
-            ShowWeekTasks();
+            UpdateMainView();
         }
 
         private void ViewCalendar_btn_Click(object sender, RoutedEventArgs e)
@@ -128,7 +136,7 @@ namespace Productivity
 
         private void Settings_btn_Click(object sender, RoutedEventArgs e)
         {
-            ShowWeekTasks();
+            UpdateMainView();
         }
     }
 

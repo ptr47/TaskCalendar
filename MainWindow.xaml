@@ -70,9 +70,10 @@
 
         <!-- Right Panel with Statistics -->
         <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Top" Margin="10" Background="#4A4A4A">
-            <TextBlock Text="Total Tasks: " Padding="5" FontSize="18"/>
-            <TextBlock Text="Completed Tasks: " Padding="5"/>
-            <TextBlock Text="Incomplete Tasks: " Padding="5"/>
+            <TextBlock x:Name="TotalTasksTextBlock" Padding="5" FontSize="18"/>
+            <TextBlock x:Name="CompletedTasksTextBlock" Padding="5"/>
+            <TextBlock x:Name="IncompleteTasksTextBlock" Padding="5"/>
         </StackPanel>
+
     </Grid>
 </Window>

@@ -1,12 +1,22 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Productivity
 {
+    public enum UpdateMode
+    {
+        Add,
+        Complete,
+        Delete
+    }
     internal class TaskManager
     {
         private readonly string dirPath;
+        public int TotalTasks { get; set; }
+        public int CompletedTasks { get; set; }
+        public int IncompleteTasks { get; set; }
 
         public TaskManager(string dirPath)
         {
@@ -15,8 +25,70 @@ namespace Productivity
             {
                 Directory.CreateDirectory(dirPath);
             }
+            TotalTasks = 0;
+            CompletedTasks = 0;
+            IncompleteTasks = 0;
         }
-
+        public void UpdateStatistics(UpdateMode mode)
+        {
+            if (mode == UpdateMode.Add)
+            {
+                TotalTasks++;
+                IncompleteTasks++;
+            }
+            else if (mode == UpdateMode.Complete)
+            {
+                IncompleteTasks--;
+                CompletedTasks++;
+            }
+            else if (mode == UpdateMode.Delete)
+            {
+                TotalTasks--;
+                CompletedTasks--;
+            }
+        }
+        private bool LoadStatistics()
+        {
+            string filePath = dirPath + "statistics.json";
+            if(File.Exists(filePath))
+            { 
+                string json = File.ReadAllText(filePath);
+                var stats = JsonConvert.DeserializeObject<List<int>>(json);
+                if (stats != null)
+                {
+                    TotalTasks = stats[0];
+                    CompletedTasks = stats[1];
+                    IncompleteTasks = stats[2];
+                }
+                else
+                {
+                    TotalTasks = 0;
+                    CompletedTasks = 0;
+                    IncompleteTasks = 0;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool SaveStatistics()
+        {
+            string filePath = dirPath + "statistics.json";
+            try
+            {
+                List<int> stats = [TotalTasks, CompletedTasks, IncompleteTasks];
+                string json = JsonConvert.SerializeObject(stats, Formatting.Indented);
+                File.WriteAllText(filePath, json);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -90,8 +162,6 @@ namespace Productivity
                         {
                             // Toggle the completion status
                             task.IsCompleted = !task.IsCompleted;
-
-                            // Save the changes
                             return SaveTasks(filePath, tasks);
                         }
                     }
