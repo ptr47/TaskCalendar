@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Productivity
@@ -13,21 +12,18 @@ namespace Productivity
     }
     internal class TaskManager
     {
-        private readonly string dirPath;
+        private static string dirPath;
         public int TotalTasks { get; set; }
         public int CompletedTasks { get; set; }
         public int IncompleteTasks { get; set; }
 
         public TaskManager(string dirPath)
         {
-            this.dirPath = dirPath;
+            TaskManager.dirPath = dirPath;
             if (!Directory.Exists(dirPath))
             {
                 Directory.CreateDirectory(dirPath);
             }
-            TotalTasks = 0;
-            CompletedTasks = 0;
-            IncompleteTasks = 0;
         }
         public void UpdateStatistics(UpdateMode mode)
         {
@@ -50,8 +46,8 @@ namespace Productivity
         private bool LoadStatistics()
         {
             string filePath = dirPath + "statistics.json";
-            if(File.Exists(filePath))
-            { 
+            if (File.Exists(filePath))
+            {
                 string json = File.ReadAllText(filePath);
                 var stats = JsonConvert.DeserializeObject<List<int>>(json);
                 if (stats != null)
@@ -95,7 +91,7 @@ namespace Productivity
         /// <param name="date">The date of the task.</param>
         /// <param name="task">The task to be added.</param>
         /// <returns><see langword="true"/> if the task was successfully added; otherwise, <see langword="false"/>.</returns>
-        public bool AddTask(DateTime date, Task task)
+        public static bool AddTask(DateTime date, Task task)
         {
             string filePath = GetFilePath(date);
             if (!string.IsNullOrWhiteSpace(filePath))
@@ -122,7 +118,21 @@ namespace Productivity
             return false; // if something fails return false
         }
 
-        public bool DeleteTask(DateTime time, Task task)
+        public static int? GetTaskNumber(DateTime date)
+        {
+            string filePath = GetFilePath(date);
+            Dictionary<DateTime, List<Task>> tasksByDate = LoadTasks(filePath);
+            if (tasksByDate != null && tasksByDate.TryGetValue(date, out List<Task>? value))
+            {
+                if (value.Count > 0)
+                {
+                    return value.Count;
+                }
+            }
+            return null;
+        }
+
+        public static bool DeleteTask(DateTime time, Task task)
         {
             string filePath = GetFilePath(time);
             if (!string.IsNullOrWhiteSpace(filePath))
@@ -146,7 +156,7 @@ namespace Productivity
             }
             return false; // if something fails return false
         }
-        public bool UpdateTask(DateTime time, Task taskToUpdate)
+        public static bool UpdateTask(DateTime time, Task taskToUpdate)
         {
             string filePath = GetFilePath(time);
             if (!string.IsNullOrWhiteSpace(filePath))
@@ -174,7 +184,7 @@ namespace Productivity
             }
             return false; // if something fails return false
         }
-        public List<Task> GetTasks(DateTime date)
+        public static List<Task> GetTasks(DateTime date)
         {
             string filePath = GetFilePath(date);
             Dictionary<DateTime, List<Task>> tasksByDate = LoadTasks(filePath);
@@ -184,7 +194,7 @@ namespace Productivity
             }
             return [];
         }
-        private string GetFilePath(DateTime date)
+        private static string GetFilePath(DateTime date)
         {
             string fileName = $"tasks-{date:yyyy-MM}.json";
             return Path.Combine(dirPath, fileName);

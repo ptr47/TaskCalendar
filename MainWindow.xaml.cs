@@ -12,6 +12,7 @@ namespace Productivity
         private static Dictionary<DateTime, List<Task>> weekTasks = [];
 
         private static readonly TaskManager taskManager = new("C:\\Users\\vboxuser\\Documents\\TasksPath");
+        private static bool startOnSunday = false;
 
         public MainWindow()
         {
@@ -36,7 +37,7 @@ namespace Productivity
             // Get tasks for each day of current week
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
-                List<Task> tasks = taskManager.GetTasks(date);
+                List<Task> tasks = TaskManager.GetTasks(date);
                 weekTasks[date] = tasks;
             }
 
@@ -81,7 +82,7 @@ namespace Productivity
                         task.IsCompleted = true; // Mark the task as completed
                                                  // Update the task in the task manager or wherever it's stored
                                                  // Assuming you have a method to update the task status
-                        taskManager.UpdateTask(date, task);
+                        TaskManager.UpdateTask(date, task);
 
                         // Refresh the UI
                         UpdateMainView();
@@ -94,7 +95,7 @@ namespace Productivity
                     if (result == MessageBoxResult.Yes)
                     {
                         // Delete the task
-                        taskManager.DeleteTask(date, task);
+                        TaskManager.DeleteTask(date, task);
                         // Refresh the UI
                         UpdateMainView();
                     }
@@ -124,14 +125,13 @@ namespace Productivity
             DateTime date = addTask.Date;
             TimeSpan time = addTask.Time;
             Task newTask = new(addTask.Description, time);
-            MessageBox.Show(date.ToString());
-            taskManager.AddTask(date, newTask);
+            TaskManager.AddTask(date, newTask);
             UpdateMainView();
         }
 
         private void ViewCalendar_btn_Click(object sender, RoutedEventArgs e)
         {
-            new Calendar().ShowDialog();
+            new Calendar(startOnSunday).ShowDialog();
         }
 
         private void Settings_btn_Click(object sender, RoutedEventArgs e)

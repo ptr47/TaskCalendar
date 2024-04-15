@@ -11,7 +11,7 @@ namespace Productivity
     public partial class Calendar : Window
     {
         private DateTime displayedDate;
-        private bool isSundayFirst = false;
+        private bool startOnSunday = false;
 
         public Calendar()
         {
@@ -24,7 +24,7 @@ namespace Productivity
         public Calendar(bool isSundayFirst)
         {
             InitializeComponent();
-            this.isSundayFirst = isSundayFirst;
+            startOnSunday = isSundayFirst;
             displayedDate = DateTime.Today;
             GenerateCalendar();
             UpdateCalendar();
@@ -51,7 +51,17 @@ namespace Productivity
 
             // Create a DateTime object for the first day of the month
             DateTime firstDayOfMonth = new(targetDate.Year, targetDate.Month, 1);
-            int startDayOfWeek = ((int)firstDayOfMonth.DayOfWeek + 6) % 7;
+
+            int startDayOfWeek;
+            if (startOnSunday)
+            {
+                startDayOfWeek = (int)firstDayOfMonth.DayOfWeek; // Start on Sunday
+            }
+            else
+            {
+                startDayOfWeek = ((int)firstDayOfMonth.DayOfWeek + 6) % 7; // Start on Monday (default behavior)
+            }
+
             int daysInMonth = DateTime.DaysInMonth(targetDate.Year, targetDate.Month);
 
             // Add the day labels to the calendar
@@ -59,7 +69,7 @@ namespace Productivity
             {
                 TextBlock dayLabel = new()
                 {
-                    Text = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames[(i + 1) % 7], // Shifted by one to start with Monday
+                    Text = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames[(i + (startOnSunday ? 0 : 1)) % 7], // Start with Sunday or Monday based on the flag
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
@@ -81,16 +91,36 @@ namespace Productivity
                 TextBlock dayNumber = new()
                 {
                     Text = day.ToString(),
-                    FontWeight = FontWeights.Bold,
+                    FontSize = 12,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Top,
                     Margin = new(2),
-                    Foreground = Brushes.WhiteSmoke
+                    Foreground = Brushes.LightGray
+                };
+                TextBlock tasksCount = new()
+                {
+                    Text = TaskManager.GetTaskNumber(new DateTime(displayedDate.Year,displayedDate.Month,day)).ToString(),
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 15,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Margin = new Thickness(2),
+                    Foreground = Brushes.GreenYellow
                 };
 
-                Grid.SetColumn(dayNumber, col);
-                Grid.SetRow(dayNumber, row);
-                CalendarGrid.Children.Add(dayNumber);
+                // Create a stack panel to hold the day number and tasks count
+                StackPanel stackPanel = new()
+                {
+                    Orientation = Orientation.Vertical,
+                    Background = Brushes.DimGray,
+                    Margin = new(5),
+
+                };
+                stackPanel.Children.Add(dayNumber);
+                stackPanel.Children.Add(tasksCount);
+                Grid.SetColumn(stackPanel, col);
+                Grid.SetRow(stackPanel, row);
+                CalendarGrid.Children.Add(stackPanel);
 
                 col++;
                 if (col > 6)
