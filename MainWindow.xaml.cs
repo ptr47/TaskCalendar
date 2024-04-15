@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Productivity
 {
@@ -15,10 +16,18 @@ namespace Productivity
         public MainWindow()
         {
             InitializeComponent();
+            ShowWeekTasks();
         }
-
+        private void ClearCalendar()
+        {
+            foreach (var stackPanel in weekCalendarGrid.Children.OfType<StackPanel>())
+            {
+                stackPanel.Children.Clear();
+            }
+        }
         private void ShowWeekTasks()
         {
+            ClearCalendar();
             DateTime today = DateTime.Today;
             DateTime startDate = today.AddDays(-(today.DayOfWeek - DayOfWeek.Monday + 7) % 7);
             DateTime endDate = startDate.AddDays(6);
@@ -33,6 +42,7 @@ namespace Productivity
             // Display tasks on the calendar
             foreach (var date in weekTasks.Keys)
             {
+
                 foreach (var task in weekTasks[date])
                 {
                     AddTaskIndicator(date.DayOfWeek, task);
@@ -41,13 +51,31 @@ namespace Productivity
         }
         private void AddTaskIndicator(DayOfWeek dayOfWeek, Task task)
         {
-            Label label = new()
+            Label taskLabel = new()
             {
-                Content = task.Description + " " + task.Time
-
+                Content = $"{DateTime.Today.Add(task.Time):HH:mm}\n{task.Description}",
+                Foreground = Brushes.White,
+                Background = Brushes.DimGray,
+                Padding = new(2),
+                Margin = new(2),
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center
             };
-            GetStackPanel(dayOfWeek).Children.Add(label);
+
+            taskLabel.MouseLeftButtonUp += (sender, e) =>
+            {
+                MessageBoxResult result = MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time).ToString("hh:mm tt")}\n\nDo you want to delete this task?", "Task Information", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Delete the task
+                    // You need to implement the logic to delete the task here
+                }
+            };
+
+            GetStackPanel(dayOfWeek).Children.Add(taskLabel);
         }
+
         private StackPanel GetStackPanel(DayOfWeek dayOfWeek) => dayOfWeek switch
         {
             DayOfWeek.Monday => Monday_StackPanel,
@@ -63,10 +91,13 @@ namespace Productivity
         private void NewTask_btn_Click(object sender, RoutedEventArgs e)
         {
             AddTask addTask = new();
-            addTask.Show();
+            addTask.ShowDialog();
             DateTime date = addTask.Date;
-            Task newTask = new(addTask.Description, TimeSpan.Zero);
+            TimeSpan time = addTask.Time;
+            Task newTask = new(addTask.Description, time);
+            MessageBox.Show(date.ToString());
             taskManager.AddTask(date, newTask);
+            ShowWeekTasks();
         }
 
         private void ViewCalendar_btn_Click(object sender, RoutedEventArgs e)

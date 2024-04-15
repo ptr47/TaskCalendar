@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Productivity"
         mc:Ignorable="d"
         Title="AddTask" Height="250" Width="400"
@@ -13,8 +14,13 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="descriptionTextBoxx" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Stretch" Background="#aaaaaa" FontSize="15"/>
-        <DatePicker x:Name="datePicker" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+        <TextBox x:Name="descriptionTextBoxx" TextWrapping="Wrap" Text="..." VerticalAlignment="Stretch" Background="#bababa" FontSize="15"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <xctk:IntegerUpDown Text="0" x:Name="hourIntUpDown" Width="Auto" FontFamily="Arial" FontSize="16" TextAlignment="Center" ValueChanged="HourIntUpDown_ValueChanged" />
+            <xctk:IntegerUpDown Text="0" x:Name="minuteIntUpDown" Width="Auto" FontFamily="Arial" FontSize="16" TextAlignment="Center" ValueChanged="MinuteIntUpDown_ValueChanged"/>
+            <DatePicker x:Name="datePicker" Grid.Row="1" Foreground="Black"/>
+        </StackPanel>
+
         <Button Content="Add Task" Grid.Row="2" Background="#4a4a4a" Click="Button_Click"/>
     </Grid>
 </Window>
