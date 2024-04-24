@@ -122,7 +122,10 @@ namespace Productivity
                 // Show the ContextMenu at the mouse position
                 contextMenu.IsOpen = true;
             };
-
+            taskLabel.MouseLeftButtonUp += (sender, e) =>
+            {
+                MessageBox.Show($"Task: {task.Description}\nTime: {DateTime.Today.Add(task.Time):HH:mm}", "Task Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            };
 
             GetStackPanel(dayOfWeek).Children.Add(taskLabel);
         }
